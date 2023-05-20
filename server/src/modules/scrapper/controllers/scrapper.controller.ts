@@ -5,7 +5,7 @@ import { ScrapperService } from '@/modules/scrapper/services/scrapper.service';
 export class ScrapperController {
   constructor(private readonly scrapperService: ScrapperService) {}
 
-  @Get()
+  @Get('/test')
   getHello(): string {
     //return this.scrapperService.getHello();
     return;
@@ -22,5 +22,15 @@ export class ScrapperController {
     console.log(name);
     console.log(json);
     return;
+  }
+
+  @Get('/olxOffers')
+  getOlxOffers() {
+    return this.scrapperService.scrappOlxJobsOfferLinks(10);
+  }
+
+  @Get('/scrappOlxJobOffer')
+  getScrappedOlxJobOffer(@Query('url') url: string) {
+    return this.scrapperService.scrappOlxJobOffer(url);
   }
 }

@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ScrapperService } from './services/scrapper.service';
-import { ScrapperController } from './controllers/app.controller';
+import { HttpModule } from '@nestjs/axios';
+import { ScrapperController } from './controllers/scrapper.controller';
 
 @Module({
+  imports: [HttpModule],
   controllers: [ScrapperController],
   providers: [ScrapperService],
 })
