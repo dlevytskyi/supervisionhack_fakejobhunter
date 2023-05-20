@@ -22,7 +22,7 @@ export class ScrapperService {
     }
   };
 
-  private async scrappOlxJobsOfferLinks(pageNumber: number) {
+  private async scrapeOlxJobsOfferLinks(pageNumber: number) {
     const url = 'https://www.olx.pl/praca/';
     const browser = this.browser;
     const page = await browser.newPage();
@@ -31,7 +31,7 @@ export class ScrapperService {
     const offerLinks = [];
     let currentPage = 1;
     while (currentPage <= pageNumber) {
-      console.log('Getting offer links from page number:', currentPage);
+      console.log('Getting offer links from page', page.url());
       const paginationForward = await page.waitForSelector(
         '::-p-xpath(//a[@data-cy="pagination-forward"])',
       );
@@ -56,7 +56,7 @@ export class ScrapperService {
     return offerLinks;
   }
 
-  private async scrappOlxJobOffer(url: string) {
+  private async scrapeOlxJobOffer(url: string) {
     try {
       console.log('Scrapping job offer from url:', url);
       const browser = this.browser;
@@ -82,9 +82,9 @@ export class ScrapperService {
     }
   }
 
-  public async scrappOlxJobOffers() {
+  public async scrapeOlxJobOffers() {
     await this.startBrowser();
-    const offerLinks = await this.scrappOlxJobsOfferLinks(
+    const offerLinks = await this.scrapeOlxJobsOfferLinks(
       Number(process.env.OLX_SCRAPPING_PAGE_NUMBER),
     );
     let jobOffers = [];
@@ -94,7 +94,7 @@ export class ScrapperService {
       const tenOfferLinks = offerLinks.slice(i, i + 10);
       i += 10;
       await Promise.all(
-        tenOfferLinks.map((offerLink) => this.scrappOlxJobOffer(offerLink)),
+        tenOfferLinks.map((offerLink) => this.scrapeOlxJobOffer(offerLink)),
       ).then((values) => {
         jobOffers = [...jobOffers, ...values];
       });
@@ -103,7 +103,7 @@ export class ScrapperService {
     return jobOffers;
   }
 
-  private async scrappOglaszamy24JobsOfferLinks(pageNumber: number) {
+  private async scrapeOglaszamy24JobsOfferLinks(pageNumber: number) {
     const BASE_URL = 'https://www.oglaszamy24.pl';
     const browser = this.browser;
     const page = await browser.newPage();
@@ -114,17 +114,13 @@ export class ScrapperService {
     const offerLinks = [];
     let currentPage = 1;
     while (currentPage <= pageNumber) {
-      console.log('Getting offer links from page number:', currentPage);
+      console.log('Getting offer links from page', page.url());
       const $ = cheerio.load(await page.content());
-      const paginationForwardUrl = $('.resultpages.next')
-        .children('a')
-        .attr('href')
-        .trim();
       $('a.o_title').each((index, element) => {
         offerLinks.push($(element).attr('href').trim());
       });
-
       currentPage++;
+      const paginationForwardUrl = `/ogloszenia/praca/oferty-pracy/?std=1&results=${currentPage}`;
       await page.goto(BASE_URL + paginationForwardUrl, {
         waitUntil: 'domcontentloaded',
       });
@@ -132,8 +128,9 @@ export class ScrapperService {
     return offerLinks;
   }
 
-  private async scrappOglaszamy24JobOffer(url: string) {
+  private async scrapeOglaszamy24JobOffer(url: string) {
     try {
+      console.log('Scrapping job offer from url:', url);
       const browser = this.browser;
       const page = await browser.newPage();
       await page.goto(url);
@@ -154,9 +151,9 @@ export class ScrapperService {
     }
   }
 
-  public async scrappOglaszamy24JobOffers() {
+  public async scrapeOglaszamy24JobOffers() {
     await this.startBrowser();
-    const offerLinks = await this.scrappOglaszamy24JobsOfferLinks(
+    const offerLinks = await this.scrapeOglaszamy24JobsOfferLinks(
       Number(process.env.OGLASZAMY24_SCRAPPING_PAGE_NUMBER),
     );
     let jobOffers = [];
@@ -167,7 +164,83 @@ export class ScrapperService {
       i += 10;
       await Promise.all(
         tenOfferLinks.map((offerLink) =>
-          this.scrappOglaszamy24JobOffer(offerLink),
+          this.scrapeOglaszamy24JobOffer(offerLink),
+        ),
+      ).then((values) => {
+        jobOffers = [...jobOffers, ...values];
+      });
+    }
+    await this.closeBrowser();
+    return jobOffers;
+  }
+
+  private async scrapeSprzedajemyJobsOfferLinks(pageNumber: number) {
+    const BASE_URL = 'https://sprzedajemy.pl';
+    const browser = this.browser;
+    const page = await browser.newPage();
+    await page.goto(BASE_URL + '/praca', {
+      waitUntil: 'domcontentloaded',
+    });
+
+    const offerLinks = [];
+    let currentPage = 1;
+    while (currentPage <= pageNumber) {
+      console.log('Getting offer links from page', page.url());
+      const $ = cheerio.load(await page.content());
+      $('a.offerLink').each((index, element) => {
+        const link = BASE_URL + $(element).attr('href').trim();
+        if (offerLinks[offerLinks.length - 1] !== link) {
+          offerLinks.push(link);
+        }
+      });
+      const paginationForwardUrl = `/praca/?offset=${30 * currentPage}`;
+      currentPage++;
+      await page.goto(BASE_URL + paginationForwardUrl, {
+        waitUntil: 'domcontentloaded',
+      });
+    }
+    return offerLinks;
+  }
+
+  private async scrapeSprzedajemyJobOffer(url: string) {
+    try {
+      console.log('Scrapping job offer from url:', url);
+      const browser = this.browser;
+      const page = await browser.newPage();
+      await page.goto(url);
+      const offerTitleElement = await page.waitForSelector('.isUrgentTitle');
+      const offerTitleValue = await offerTitleElement.evaluate(
+        (el) => el.textContent,
+      );
+      const offerDescriptionElement = await page.waitForSelector(
+        '.offerDescription span',
+      );
+      const offerDescriptionHtml = await offerDescriptionElement.evaluate(
+        (el) => el.innerHTML,
+      );
+      const offerDescriptionText = htmlToText.convert(offerDescriptionHtml);
+      page.close();
+      return { offerTitleValue, offerDescriptionText, offerUrl: url };
+    } catch (error) {
+      console.error(`Error scraping job offers from ${url}:`, error);
+      return {};
+    }
+  }
+
+  public async scrapeSprzedajemyJobOffers() {
+    await this.startBrowser();
+    const offerLinks = await this.scrapeSprzedajemyJobsOfferLinks(
+      Number(process.env.SPRZEDAJEMY_SCRAPPING_PAGE_NUMBER),
+    );
+    let jobOffers = [];
+
+    //Scrapping 10 offers at a time
+    for (let i = 0; i < offerLinks.length; i++) {
+      const tenOfferLinks = offerLinks.slice(i, i + 10);
+      i += 10;
+      await Promise.all(
+        tenOfferLinks.map((offerLink) =>
+          this.scrapeSprzedajemyJobOffer(offerLink),
         ),
       ).then((values) => {
         jobOffers = [...jobOffers, ...values];

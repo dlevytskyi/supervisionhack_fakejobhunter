@@ -16,12 +16,16 @@ export class ScrapperController {
 
   @Get('/olxOffers')
   getOlxOffers() {
-    return this.scrapperService.scrappOlxJobOffers();
+    return this.scrapperService.scrapeOlxJobOffers();
   }
 
-  @Get('/oglaszamy24plOffers')
+  @Get('/oglaszamy24Offers')
   getOglaszamy24Offers() {
-    return this.scrapperService.scrappOglaszamy24JobOffers();
+    return this.scrapperService.scrapeOglaszamy24JobOffers();
   }
 
+  @Get('/sprzedajemyOffers')
+  getSprzedajemyOffers() {
+    return this.scrapperService.scrapeSprzedajemyJobOffers();
+  }
 }
