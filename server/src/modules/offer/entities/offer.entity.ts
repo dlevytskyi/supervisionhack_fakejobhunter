@@ -6,8 +6,8 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { OfferProcessingMetrics } from './offerProcessingMetrics.entity';
-import { OfferAnaliticsResult } from './offerAnaliticsResult.entity';
+import { OfferProcessingMetrics } from './offer-processing-metrics.entity';
+import { OfferAnaliticsResult } from './offer-analitics-result.entity';
 import { v4 as uuidv4 } from 'uuid';
 
 @Entity('offers.offers')
