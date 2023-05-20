@@ -1,8 +1,7 @@
 import { OfferService } from '@/modules/offer/sevices/offer.service';
 import { Injectable } from '@nestjs/common';
 import { ScrapperService } from './scrapper.service';
-import { ProcessingStatus } from '@/modules/offer/enums/processingStatus.enum';
-
+import { ProcessingStatus } from '@/modules/offer/enums/processing-status.enum';
 @Injectable()
 export class ScrapperStoreService {
   constructor(

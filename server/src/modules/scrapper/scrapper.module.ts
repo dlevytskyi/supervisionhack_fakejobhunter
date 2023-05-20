@@ -3,7 +3,7 @@ import { ScrapperService } from './services/scrapper.service';
 import { HttpModule } from '@nestjs/axios';
 import { ScrapperController } from './controllers/scrapper.controller';
 import { OfferModule } from '../offer/offer.module';
-import { ScrapperStoreService } from './services/scrapperStore.service';
+import { ScrapperStoreService } from './services/scrapper-store.service';
 
 @Module({
   imports: [HttpModule, OfferModule],
