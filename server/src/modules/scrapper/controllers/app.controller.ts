@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ScrapperService } from '@/modules/scrapper/services/scrapper.service';
 
 @Controller()
@@ -10,9 +10,15 @@ export class ScrapperController {
     //return this.scrapperService.getHello();
     return;
   }
-  @Post('/hello')
-  postHello(@Param('id') id: string, @Body() json: string): string {
-    //return this.scrapperService.getHello();
+  @Post('/hello/:id')
+  postHello(
+    @Param('id') id: string,
+    @Query('name') name: string,
+    @Body() json: string,
+  ): string {
+    //return this.scrapperService.getHello()
+    // http://localhost:3000/hello/33221?name=asd
+    console.log(id);
     console.log(name);
     console.log(json);
     return;
