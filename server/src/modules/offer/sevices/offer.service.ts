@@ -45,6 +45,11 @@ export class OfferService {
     return offer;
   }
 
+  async findOneByUrl(url: string): Promise<Offer> | null{
+    const offer = await this.repo.findOneBy({ url: url });
+    return offer;
+  }
+
   async findAll(): Promise<Offer[]> {
     return await this.repo.find();
   }

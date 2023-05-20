@@ -1,17 +1,17 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ScrapperService } from '@/modules/scrapper/services/scrapper.service';
-import { OfferService } from '@/modules/offer/sevices/offer.service';
+import { ScrapperStoreService } from '../services/scrapperStore.service';
 
 @Controller()
 export class ScrapperController {
   constructor(
     private readonly scrapperService: ScrapperService,
-    private readonly offerService: OfferService,
+    private readonly scrapperStoreService: ScrapperStoreService,
   ) {}
 
   @Get('/offers')
   async getOffers(): Promise<any> {
-    return await this.offerService.findAll();
+    return await this.scrapperStoreService.scrapeAndStoreOffers();
   }
 
   @Get('/olxOffers')

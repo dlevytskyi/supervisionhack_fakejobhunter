@@ -4,6 +4,13 @@ import * as puppeteer from 'puppeteer';
 import * as htmlToText from 'html-to-text';
 import * as cheerio from 'cheerio';
 
+export interface IOffer {
+  title: string;
+  scrappingDate: Date;
+  url: string;
+  content: string;
+}
+
 @Injectable()
 export class ScrapperService {
   constructor(private readonly httpService: HttpService) {}
@@ -31,7 +38,7 @@ export class ScrapperService {
     const offerLinks = [];
     let currentPage = 1;
     while (currentPage <= pageNumber) {
-      console.log('Getting offer links from page', page.url());
+      console.log('Getting offer links from page', page.url() + currentPage);
       const paginationForward = await page.waitForSelector(
         '::-p-xpath(//a[@data-cy="pagination-forward"])',
       );
@@ -56,7 +63,7 @@ export class ScrapperService {
     return offerLinks;
   }
 
-  private async scrapeOlxJobOffer(url: string) {
+  private async scrapeOlxJobOffer(url: string): Promise<IOffer> {
     try {
       console.log('Scrapping job offer from url:', url);
       const browser = this.browser;
@@ -76,17 +83,27 @@ export class ScrapperService {
       );
       const offerDescriptionText = htmlToText.convert(offerDescriptionHtml);
       page.close();
-      return { offerTitleValue, offerDescriptionText, offerUrl: url };
+      return {
+        title: offerTitleValue,
+        content: offerDescriptionText,
+        url: url,
+        scrappingDate: new Date(),
+      };
     } catch (error) {
       console.error(`Error scrapping job offer from url ${url}:`, error);
     }
   }
 
-  public async scrapeOlxJobOffers() {
+  public async scrapeOlxJobOffers(): Promise<IOffer[]> {
     await this.startBrowser();
-    const offerLinks = await this.scrapeOlxJobsOfferLinks(
-      Number(process.env.OLX_SCRAPPING_PAGE_LIMIT),
+    const offerLinks = new Array(
+      ...new Set(
+        await this.scrapeOlxJobsOfferLinks(
+          Number(process.env.OLX_SCRAPPING_PAGE_LIMIT),
+        ),
+      ),
     );
+
     let jobOffers = [];
 
     //Scrapping 10 offers at a time
@@ -128,7 +145,7 @@ export class ScrapperService {
     return offerLinks;
   }
 
-  private async scrapeOglaszamy24JobOffer(url: string) {
+  private async scrapeOglaszamy24JobOffer(url: string): Promise<IOffer> {
     try {
       console.log('Scrapping job offer from url:', url);
       const browser = this.browser;
@@ -144,17 +161,25 @@ export class ScrapperService {
       );
       const offerDescriptionText = htmlToText.convert(offerDescriptionHtml);
       page.close();
-      return { offerTitleValue, offerDescriptionText, offerUrl: url };
+      return {
+        title: offerTitleValue,
+        content: offerDescriptionText,
+        url: url,
+        scrappingDate: new Date(),
+      };
     } catch (error) {
       console.error(`Error scraping job offers from ${url}:`, error);
-      return {};
     }
   }
 
-  public async scrapeOglaszamy24JobOffers() {
+  public async scrapeOglaszamy24JobOffers(): Promise<IOffer[]> {
     await this.startBrowser();
-    const offerLinks = await this.scrapeOglaszamy24JobsOfferLinks(
-      Number(process.env.OGLASZAMY24_SCRAPPING_PAGE_LIMIT),
+    const offerLinks = new Array(
+      ...new Set(
+        await this.scrapeOglaszamy24JobsOfferLinks(
+          Number(process.env.OGLASZAMY24_SCRAPPING_PAGE_LIMIT),
+        ),
+      ),
     );
     let jobOffers = [];
 
@@ -202,7 +227,7 @@ export class ScrapperService {
     return offerLinks;
   }
 
-  private async scrapeSprzedajemyJobOffer(url: string) {
+  private async scrapeSprzedajemyJobOffer(url: string): Promise<IOffer> {
     try {
       console.log('Scrapping job offer from url:', url);
       const browser = this.browser;
@@ -220,17 +245,25 @@ export class ScrapperService {
       );
       const offerDescriptionText = htmlToText.convert(offerDescriptionHtml);
       page.close();
-      return { offerTitleValue, offerDescriptionText, offerUrl: url };
+      return {
+        title: offerTitleValue,
+        content: offerDescriptionText,
+        url: url,
+        scrappingDate: new Date(),
+      };
     } catch (error) {
       console.error(`Error scraping job offers from ${url}:`, error);
-      return {};
     }
   }
 
-  public async scrapeSprzedajemyJobOffers() {
+  public async scrapeSprzedajemyJobOffers(): Promise<IOffer[]> {
     await this.startBrowser();
-    const offerLinks = await this.scrapeSprzedajemyJobsOfferLinks(
-      Number(process.env.SPRZEDAJEMY_SCRAPPING_PAGE_LIMIT),
+    const offerLinks = new Array(
+      ...new Set(
+        await this.scrapeSprzedajemyJobsOfferLinks(
+          Number(process.env.SPRZEDAJEMY_SCRAPPING_PAGE_LIMIT),
+        ),
+      ),
     );
     let jobOffers = [];
 
