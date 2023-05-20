@@ -11,7 +11,7 @@ export class ScrapperController {
 
   @Get('/offers')
   async getOffers(): Promise<any> {
-    return await this.offerService.create();
+    return await this.offerService.findAll();
   }
 
   @Get('/olxOffers')
