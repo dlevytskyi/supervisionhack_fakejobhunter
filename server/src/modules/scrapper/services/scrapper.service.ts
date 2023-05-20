@@ -85,7 +85,7 @@ export class ScrapperService {
   public async scrapeOlxJobOffers() {
     await this.startBrowser();
     const offerLinks = await this.scrapeOlxJobsOfferLinks(
-      Number(process.env.OLX_SCRAPPING_PAGE_NUMBER),
+      Number(process.env.OLX_SCRAPPING_PAGE_LIMIT),
     );
     let jobOffers = [];
 
@@ -154,7 +154,7 @@ export class ScrapperService {
   public async scrapeOglaszamy24JobOffers() {
     await this.startBrowser();
     const offerLinks = await this.scrapeOglaszamy24JobsOfferLinks(
-      Number(process.env.OGLASZAMY24_SCRAPPING_PAGE_NUMBER),
+      Number(process.env.OGLASZAMY24_SCRAPPING_PAGE_LIMIT),
     );
     let jobOffers = [];
 
@@ -230,7 +230,7 @@ export class ScrapperService {
   public async scrapeSprzedajemyJobOffers() {
     await this.startBrowser();
     const offerLinks = await this.scrapeSprzedajemyJobsOfferLinks(
-      Number(process.env.SPRZEDAJEMY_SCRAPPING_PAGE_NUMBER),
+      Number(process.env.SPRZEDAJEMY_SCRAPPING_PAGE_LIMIT),
     );
     let jobOffers = [];
 
