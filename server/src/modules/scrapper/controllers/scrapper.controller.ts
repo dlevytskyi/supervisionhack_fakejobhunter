@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ScrapperService } from '@/modules/scrapper/services/scrapper.service';
 import { ScrapperStoreService } from '../services/scrapper-store.service';
 
