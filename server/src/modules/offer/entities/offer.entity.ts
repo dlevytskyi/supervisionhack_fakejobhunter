@@ -7,7 +7,6 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { OfferProcessingMetrics } from './offer-processing-metrics.entity';
-import { OfferAnaliticsResult } from './offer-analitics-result.entity';
 import { v4 as uuidv4 } from 'uuid';
 
 @Entity('offers.offers')
@@ -33,16 +32,18 @@ export class Offer {
   @Column()
   processing_status!: string;
 
+  @Column()
+  model_decision!: string;
+
+  @Column()
+  analyst_decision!: string;
+
   @OneToOne(
     () => OfferProcessingMetrics,
     (x: OfferProcessingMetrics) => x.offer_id,
   )
   @JoinColumn({ referencedColumnName: 'id', name: 'id' })
   offerProcessingMetrics!: OfferProcessingMetrics;
-
-  @OneToOne(() => OfferAnaliticsResult, (x: OfferAnaliticsResult) => x.offer_id)
-  @JoinColumn({ referencedColumnName: 'id', name: 'id' })
-  offerAnaliticsResult!: OfferAnaliticsResult;
 
   constructor() {
     this.id = uuidv4();

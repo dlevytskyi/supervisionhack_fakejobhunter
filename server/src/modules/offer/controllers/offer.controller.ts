@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { OfferService } from '../sevices/offer.service';
 import { Offer } from '../entities/offer.entity';
 import { OfferListQuery } from './queries/offer-list.query';
 import { ProcessingStatus } from '../enums/processing-status.enum';
 import { CreateOfferCommand } from '../commands/create-offer.command';
+import { UpdateOfferAnalystDecisionCommand } from '../commands/update-offer-analyst-status.command';
+import { UuidString } from '@/common/types/shared-types';
 
 @Controller()
 export class OfferController {
@@ -25,5 +27,15 @@ export class OfferController {
       body.content,
       ProcessingStatus.NEW,
     );
+  }
+
+  @Post('/offers/:id/decision')
+  async updateOfferAnalystDecision(
+    @Param('id') id: UuidString,
+    @Body() body: UpdateOfferAnalystDecisionCommand,
+  ): Promise<Offer> {
+    return await this.offerService.update(id, {
+      analyst_decision: body.decision,
+    });
   }
 }

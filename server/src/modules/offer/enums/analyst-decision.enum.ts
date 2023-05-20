@@ -1,4 +1,4 @@
-export enum AnalistDecision {
+export enum AnalystDecision {
   POSITIVE = 'POSITIVE',
   NEGATIVE = 'NEGATIVE',
 }
