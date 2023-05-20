@@ -43,7 +43,7 @@ X_count = count_vectorizer.fit_transform(features_as_strings)
 X = X_count
 y = np.array(labels)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 print("Training set shape:", X_train.shape, y_train.shape)
 print("Testing set shape:", X_test.shape, y_test.shape)
@@ -51,6 +51,19 @@ print("Testing set shape:", X_test.shape, y_test.shape)
 #Train a machine learning model
 model = SVC()
 model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+# Compare the predicted labels with the actual labels
+for i in range(len(y_pred)):
+    if y_pred[i] == y_test[i]:
+        print("Correct prediction:")
+    else:
+        print("Incorrect prediction:")
+    print("Job offer:", X_test[i])  # Print the details of the job offer
+    print("Predicted label:", y_pred[i])  # Print the predicted label
+    print("Actual label:", y_test[i])  # Print the actual label
+    print("--------------------")
 
 #Evaluate the model
 accuracy = model.score(X_test, y_test)
