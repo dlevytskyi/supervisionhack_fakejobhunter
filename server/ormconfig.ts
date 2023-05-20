@@ -1,6 +1,6 @@
 import * as fs from 'fs';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm/dist/interfaces/typeorm-options.interface';
 import * as dotenv from 'dotenv';
+import { DataSource, DataSourceOptions } from 'typeorm';
 
 const path = '.env';
 if (fs.existsSync(path)) {
@@ -17,7 +17,8 @@ const statementTimeout = process.env.DB_STATEMENT_TIMEOUT
   ? parseInt(process.env.DB_STATEMENT_TIMEOUT)
   : 20000;
 
-const config = {
+export const config = {
+  name: 'default',
   type: 'postgres',
   connectTimeoutMS,
   retryAttempts: 20,
@@ -29,7 +30,7 @@ const config = {
   password: process.env.DB_PASSWORD || 'password',
   database: process.env.DB_NAME || 'local',
   migrations: ['./dist/src/database/migrations/*.js'],
-  entities: ['./dist/src/modules/**/*.model.js'],
+  entities: ['./dist/src/modules/**/*.entity.js'],
   migrationsRun: false,
   synchronize: false,
   logging: false,
@@ -40,6 +41,6 @@ const config = {
     options: '-c lock_timeout=10000ms',
     statement_timeout: statementTimeout,
   },
-} as TypeOrmModuleOptions;
+} as DataSourceOptions;
 
-export default config;
+export default new DataSource(config);
