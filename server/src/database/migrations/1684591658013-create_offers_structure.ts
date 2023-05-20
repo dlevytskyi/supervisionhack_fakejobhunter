@@ -13,11 +13,16 @@ export class CreateOffersStructure1684591658013 implements MigrationInterface {
             url         varchar                   not null,
             login       varchar                 default null,
             content     json                    not null,
-            processing_status varchar           not null
+            processing_status varchar           not null,
+            model_decision varchar             default null,
+            analist_decision varchar           default null
         );
 
-        create unique index offer_id_and_processing_status
-        on offers.offers (id, processing_status);
+        create unique index offer_id_and_model_decision_idx
+        on offers.offers (id, model_decision);
+
+        create unique index offer_id_and_analist_decision_idx
+        on offers.offers (id, analist_decision);
 
         create table offers.offer_processing_metrics
         (
@@ -27,17 +32,6 @@ export class CreateOffersStructure1684591658013 implements MigrationInterface {
         );
 
         alter table offers.offer_processing_metrics add constraint offer_processing_metrics_offer_id_fk
-        foreign key (offer_id)
-        references offers.offers (id);
-
-        create table offers.offer_analitics_decision
-        (
-            id                  uuid           not null constraint offer_analitics_decisions_pk primary key,
-            offer_id            uuid           not null,
-            decision            varchar        not null
-        );
-
-        alter table offers.offer_analitics_decision add constraint offer_analitics_decision_offer_id_fk
         foreign key (offer_id)
         references offers.offers (id);
     `);
