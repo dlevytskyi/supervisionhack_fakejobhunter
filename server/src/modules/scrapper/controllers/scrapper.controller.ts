@@ -9,8 +9,8 @@ export class ScrapperController {
     private readonly scrapperStoreService: ScrapperStoreService,
   ) {}
 
-  @Get('/scrapper/offers')
-  async getOffers(): Promise<any> {
+  @Get('/scrapeAndStoreOffers')
+  async getOffers() {
     return await this.scrapperStoreService.scrapeAndStoreOffers();
   }
 
