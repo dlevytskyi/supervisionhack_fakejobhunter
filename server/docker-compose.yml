@@ -1,21 +1,23 @@
 version: '3.3'
 services:
-  customuse-api:
+  server:
     image: node:18
     container_name: server
     restart: always
-    command: sh -c 'cd /api/ && npm ic && npm run build && make migrate'
+    command: sh -c 'cd /api/ && npm ic && npm run build && make migrate && npm run start:dev'
     volumes:
       - ./:/api/
     ports:
-      - '${APP_PORT}:${APP_PORT}'
+      - '3000:3000'
     depends_on:
       - local-db
+    environment:
+      DB_HOST: host.docker.internal
     networks:
       - local-network
 
   local-db:
-    image: postgres:12
+    image: postgres
     container_name: local-db
     ports:
       - '6432:5432'
@@ -24,7 +26,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_DB: local
     volumes:
-      - loacl_postgres:/var/lib/postgresql/data
+      - local_postgres:/var/lib/postgresql/data
     networks:
       - local-network
 
