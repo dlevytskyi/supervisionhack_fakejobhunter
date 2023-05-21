@@ -11,7 +11,7 @@ cd server
 docker-compose -f ./docker-compose.yml up
 ```
 
-- Go to webapplication at localhost:3000
+- Go to webapplication at localhost:4173
 - Scrappe Data
 - Run ML Model manually (see below, improve in future)
 
@@ -24,7 +24,7 @@ python train_or_predict.py train --to create model
 python train_or_predict.py predict --to predict data set
 ```
 
-- Enjoy webapplication (offer page to see offers, prediction page to see predictions, and csv tools to import/export data from db in csv format)
+- Enjoy webapplication (offer page to see offers and predictions, and csv tools to import/export data from db in csv format)
 
 ## Architecture
 
