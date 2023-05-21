@@ -140,6 +140,8 @@ export class OfferController {
         row.url,
         JSON.stringify({ content: row.content }),
         ProcessingStatus.PROCESSED,
+        null,
+        null,
         row.analyst_decision,
       );
     });
