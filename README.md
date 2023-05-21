@@ -8,6 +8,7 @@
 
 ```
 cd server
+docker network create local-network
 docker-compose -f ./docker-compose.yml up
 ```
 
