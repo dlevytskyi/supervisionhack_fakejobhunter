@@ -15,14 +15,14 @@ export class CreateOffersStructure1684591658013 implements MigrationInterface {
             content     json                    not null,
             processing_status varchar           not null,
             model_decision varchar             default null,
-            analist_decision varchar           default null
+            analyst_decision varchar           default null
         );
 
         create unique index offer_id_and_model_decision_idx
         on offers.offers (id, model_decision);
 
         create unique index offer_id_and_analist_decision_idx
-        on offers.offers (id, analist_decision);
+        on offers.offers (id, analyst_decision);
 
         create table offers.offer_processing_metrics
         (

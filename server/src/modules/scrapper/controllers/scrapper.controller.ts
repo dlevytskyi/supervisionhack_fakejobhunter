@@ -10,7 +10,7 @@ export class ScrapperController {
   ) {}
 
   @Get('/scrapper/offers')
-  async getOffers(): Promise<any> {
+  async getOffers() {
     return await this.scrapperStoreService.scrapeAndStoreOffers();
   }
 
