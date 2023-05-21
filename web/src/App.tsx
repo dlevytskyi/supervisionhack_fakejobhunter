@@ -5,6 +5,7 @@ import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import OfferList from './components/OfferList/offer-list.component';
 import Scrapper from './components/Scrapper/scrapper.component';
+import CsvTools from './components/CsvTools/csv-tools.component';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -47,7 +48,7 @@ const App: React.FC = () => {
       <CloudDownloadOutlined />
     ),
     getItem(
-      'Oferty',
+      'Offers',
       '2',
       () => {
         navigate('/');
@@ -55,20 +56,31 @@ const App: React.FC = () => {
       <DesktopOutlined />
     ),
     getItem(
-      'Pobierz CSV',
-      '9',
+      'CSV Tools',
+      '3',
       () => {
-        navigate('/downloadCsv');
+        navigate('/csvTools');
       },
       <FileOutlined />
     ),
   ];
 
+  const getSelectedMenuKey = () => {
+    if (selectedKey === '/scrapper') return '1';
+    if (selectedKey === 'csvTools') return '3';
+    return '2';
+  };
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={[getSelectedMenuKey()]}
+          mode="inline"
+          items={items}
+        />
       </Sider>
       <Layout>
         <Header
@@ -86,6 +98,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<OfferList />} />
             <Route path="/scrapper" element={<Scrapper />} />
+            <Route path="/csvTools" element={<CsvTools />} />
           </Routes>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
