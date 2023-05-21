@@ -1,7 +1,7 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
-from ... import dbconfig
+# from ... import dbconfig
 from utils import remove_non_alphanumeric, create_unique_list_of_words, read_words_from_file, process_text, create_unique_bag_words, create_features_and_labels
 import numpy as np
 import joblib
@@ -60,10 +60,12 @@ if args.generate=="train":
     joblib.dump(model, '../../models/model.pkl')
 else:
     loaded_model = joblib.load('../../models/model.pkl')
-    cursor = db_conn()
+    # cursor = db_conn()
     for i in range(len(features)):
         X_count = count_vectorizer.fit_transform([features[i]])
         predicted_label = loaded_model.predict(X_count)
-        create_update = f"UPDATE OFFERS.OFFERS SET MODEL_DECISION = '{predicted_label}' WHERE ID = {ids[i]} "
-        cursor.execute(create_update)
-    cursor.close()
+        print(ids[i])
+        print(predicted_label)
+        # create_update = f"UPDATE OFFERS.OFFERS SET MODEL_DECISION = '{predicted_label}' WHERE ID = {ids[i]} "
+        # cursor.execute(create_update)
+    # cursor.close()

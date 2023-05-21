@@ -31,6 +31,6 @@ with open(f"tmp/offers_{args.generate}.csv", "w", encoding="utf-8", newline="") 
     cursor.copy_expert(f"COPY {temp_table_name} TO STDOUT WITH CSV HEADER", csv_file)
 
 cursor.close()
-conn.close()
+# conn.close()
 
 
