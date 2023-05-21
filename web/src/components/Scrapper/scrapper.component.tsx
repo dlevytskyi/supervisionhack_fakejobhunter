@@ -24,11 +24,11 @@ const Scrapper: React.FC = () => {
     setIsScrapperRunning(true);
     fetch('http://localhost:3000/scrapper/offers')
       .then((response) => response.text())
-      .then((data) => {
+      .then(() => {
         setIsScrapperRunning(false);
         successScrapped();
       })
-      .catch((err) => {
+      .catch(() => {
         setIsScrapperRunning(false);
         errorScrapped();
       });

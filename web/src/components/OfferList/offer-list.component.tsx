@@ -102,10 +102,10 @@ const OfferList: React.FC = () => {
       headers: { 'Content-Type': 'application/json' },
     })
       .then((response) => response.text())
-      .then((data) => {
+      .then(() => {
         successUpdateAnalystNotificationMsg();
       })
-      .catch((err) => {
+      .catch(() => {
         errorUpdateAnalystNotificationMsg();
       });
   };
@@ -165,7 +165,7 @@ const OfferList: React.FC = () => {
             },
           };
         }}
-        rowClassName={(record, index) => 'offer-row'}
+        rowClassName={() => 'offer-row'}
       />
       <Modal
         title={selectedRecord?.title}
