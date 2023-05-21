@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, Route, Routes } from 'react-router-dom';
-import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { DesktopOutlined, FileOutlined, CloudDownloadOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Layout, Menu, theme } from 'antd';
 import OfferList from './components/OfferList/offer-list.component';
+import Scrapper from './components/Scrapper/scrapper.component';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -49,7 +44,7 @@ const App: React.FC = () => {
       () => {
         navigate('/scrapper');
       },
-      <PieChartOutlined />
+      <CloudDownloadOutlined />
     ),
     getItem(
       'Oferty',
@@ -81,7 +76,8 @@ const App: React.FC = () => {
             padding: 0,
             background: colorBgContainer,
             textAlign: 'center',
-            fontSize: '18px',
+            fontSize: '24px',
+            fontWeight: 'bold',
           }}
         >
           #FakeJobHunter
@@ -89,6 +85,7 @@ const App: React.FC = () => {
         <Content style={{ margin: '0 16px' }}>
           <Routes>
             <Route path="/" element={<OfferList />} />
+            <Route path="/scrapper" element={<Scrapper />} />
           </Routes>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
