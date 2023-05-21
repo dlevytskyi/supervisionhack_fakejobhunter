@@ -15,6 +15,8 @@ export class OfferService {
     content: string,
     processing_status: string,
     login?: string,
+    model_decision?: string,
+    analyst_decision?: string,
   ): Promise<Offer> {
     const offer = this.repo.create({
       title: title,
@@ -23,6 +25,8 @@ export class OfferService {
       login: login ? login : null,
       content: JSON.parse(content),
       processing_status: processing_status,
+      model_decision: model_decision ? model_decision : null,
+      analyst_decision: analyst_decision ? analyst_decision : null,
     });
 
     return await this.repo.save(offer);
