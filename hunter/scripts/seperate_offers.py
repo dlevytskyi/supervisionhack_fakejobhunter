@@ -7,7 +7,6 @@ parser.add_argument("delimiter", type=str, help="Delimiter indicating the start 
 parser.add_argument("folder_name", type=str, help="Path where to add the processed files")
 args = parser.parse_args()
 
-
 with open(args.file_path, "r", encoding="utf-8", errors="ignore") as file:
     content = file.read()
 
